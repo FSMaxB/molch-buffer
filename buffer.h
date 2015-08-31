@@ -60,4 +60,13 @@ void buffer_clear(buffer_t *buffer);
  * as large as the input data plus one.
  */
 int buffer_to_hex(buffer_t * const hex, const buffer_t * const data);
+
+/*
+ * Concatenate a buffer to the first.
+ *
+ * Return 0 on success.
+ */
+int buffer_concat(
+		buffer_t * const destination,
+		buffer_t * const source);
 #endif
