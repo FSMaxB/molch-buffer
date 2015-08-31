@@ -28,16 +28,19 @@
  */
 buffer_t* buffer_init(
 		buffer_t * const buffer,
-		const size_t buffer_length) {
-		buffer->buffer_length = buffer_length;
-		buffer->content_length = 0;
-		buffer->readonly = false;
-		buffer->content = (unsigned char*) buffer + sizeof(buffer_t);
+		const size_t buffer_length,
+		const size_t content_length) {
+	buffer->buffer_length = buffer_length;
+	buffer->content_length = (content_length > buffer_length)
+		? buffer_length
+		: content_length;
+	buffer->readonly = false;
+	buffer->content = (unsigned char*) buffer + sizeof(buffer_t);
 	return buffer;
 }
 
 /*
- * Create hexadezimal string from a buffer.
+ * Create hexadecimal string from a buffer.
  *
  * The output buffer has to be at least twice
  * as large as the input data plus one.

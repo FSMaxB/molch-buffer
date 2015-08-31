@@ -22,7 +22,7 @@
 #include "buffer.h"
 
 void print_hex(buffer_t *data) {
-	buffer_t *hex = buffer_create(2 * data->content_length + 1);
+	buffer_t *hex = buffer_create(2 * data->content_length + 1, 2 * data->content_length + 1);
 	int status = buffer_to_hex(hex, data);
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to print data as hex! (%i)\n", status);
@@ -35,8 +35,7 @@ int main(void) {
 	sodium_init();
 
 	//create a new buffer
-	buffer_t *key = buffer_create(crypto_secretbox_KEYBYTES);
-	key->content_length = key->buffer_length;
+	buffer_t *key = buffer_create(crypto_secretbox_KEYBYTES, crypto_secretbox_KEYBYTES);
 	randombytes_buf(key->content, key->content_length);
 
 	printf("Random buffer (%zi Bytes):\n", key->content_length);
