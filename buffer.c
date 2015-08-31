@@ -60,3 +60,14 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) {
 	hex->content_length = 2 * data->content_length + 1;
 	return 0;
 }
+
+/*
+ * Clear a buffer.
+ *
+ * Overwrites the buffer with zeroes and
+ * resets the content size.
+ */
+void buffer_clear(buffer_t *buffer) {
+	sodium_memzero(buffer->content, buffer->buffer_length);
+	buffer->content_length = 0;
+}

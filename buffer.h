@@ -46,11 +46,18 @@ buffer_t* buffer_init(
 #define buffer_create(buffer_length, content_length) buffer_init(alloca(sizeof(buffer_t) + buffer_length), buffer_length, content_length)
 
 /*
- * Create hexadezimal string from a buffer.
+ * Clear a buffer.
+ *
+ * Overwrites the buffer with zeroes and
+ * resets the content size.
+ */
+void buffer_clear(buffer_t *buffer);
+
+/*
+ * Create hexadecimal string from a buffer.
  *
  * The output buffer has to be at least twice
  * as large as the input data plus one.
  */
 int buffer_to_hex(buffer_t * const hex, const buffer_t * const data);
-
 #endif
