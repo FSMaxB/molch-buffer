@@ -87,7 +87,7 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data);
  */
 int buffer_concat(
 		buffer_t * const destination,
-		buffer_t * const source);
+		const buffer_t * const source);
 
 /*
  * Copy parts of a buffer to another buffer.
