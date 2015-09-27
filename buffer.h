@@ -101,6 +101,11 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) __attribute
 #define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free(buffer)
 
 /*
+ * Macro to create a buffer with already existing data without cloning it.
+ */
+#define buffer_create_with_existing_array(array, length) buffer_init_with_pointer(alloca(sizeof(buffer_t)), array, length, length)
+
+/*
  * Concatenate a buffer to the first.
  *
  * Return 0 on success.
