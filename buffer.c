@@ -138,6 +138,10 @@ void buffer_clear(buffer_t *buffer) {
 int buffer_concat(
 		buffer_t * const destination,
 		const buffer_t * const source) {
+	if (destination->readonly) {
+		return -5;
+	}
+
 	return buffer_copy(
 			destination,
 			destination->content_length,
@@ -199,6 +203,10 @@ int buffer_copy(
 int buffer_clone(
 		buffer_t * const destination,
 		const buffer_t * const source) {
+	if (destination->readonly) {
+		return -5;
+	}
+
 	if (destination->buffer_length < source->content_length) {
 		return -6;
 	}
@@ -261,6 +269,10 @@ int buffer_clone_from_raw(
 		buffer_t * const destination,
 		const unsigned char * const source,
 		const size_t length) {
+	if (destination->readonly) {
+		return -5;
+	}
+
 	if (destination->buffer_length < length) {
 		return -6;
 	}
@@ -406,6 +418,10 @@ int buffer_fill_random(
 int buffer_xor(
 		buffer_t * const destination,
 		const buffer_t * const source) {
+	if (destination->readonly) {
+		return -5;
+	}
+
 	if ((destination->content_length != source->content_length)
 			|| (destination->buffer_length < destination->content_length)
 			|| (source->buffer_length < source->content_length)) {
