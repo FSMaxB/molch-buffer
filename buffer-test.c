@@ -20,7 +20,16 @@
 #include <sodium.h>
 
 #include "buffer.h"
-#include "utils.h"
+
+void print_hex(buffer_t *data) {
+	buffer_t *hex = buffer_create(2 * data->content_length + 1);
+	int status = buffer_to_hex(hex, data);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to print data as hex! (%i)\n", status);
+		exit(-1);
+	}
+	printf("%.*s\n", (int)hex->content_length, hex->content);
+}
 
 int main(void) {
 	sodium_init();
@@ -31,7 +40,7 @@ int main(void) {
 	randombytes_buf(key->content, key->content_length);
 
 	printf("Random buffer (%zi Bytes):\n", key->content_length);
-	print_hex(key->content, key->content_length, 30);
+	print_hex(key);
 	putchar('\n');
 
 	return EXIT_SUCCESS;

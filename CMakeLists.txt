@@ -28,7 +28,7 @@ if("${DISABLE_MEMORYCHECK_COMMAND}" MATCHES "TRUE")
     set(MEMORYCHECK_COMMAND "MEMORYCHECK_COMMAND-NOTFOUND")
 endif("${DISABLE_MEMORYCHECK_COMMAND}" MATCHES "TRUE")
 
-add_library(molch-buffer buffer utils)
+add_library(molch-buffer buffer)
 target_link_libraries(molch-buffer ${libs})
 
 #test

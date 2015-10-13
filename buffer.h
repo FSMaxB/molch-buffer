@@ -44,4 +44,12 @@ buffer_t* buffer_init(
  */
 #define buffer_create(length) buffer_init(alloca(sizeof(buffer_t) + length), length)
 
+/*
+ * Create hexadezimal string from a buffer.
+ *
+ * The output buffer has to be at least twice
+ * as large as the input data plus one.
+ */
+int buffer_to_hex(buffer_t * const hex, const buffer_t * const data);
+
 #endif
