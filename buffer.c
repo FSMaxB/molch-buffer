@@ -67,6 +67,8 @@ buffer_t* buffer_init_with_pointer(
 		*writable_content_pointer = content;
 	}
 
+	buffer->position = 0;
+
 	return buffer;
 }
 
