@@ -4,7 +4,7 @@ project (molch-buffer)
 
 set(CMAKE_BUILD_TYPE Debug)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
 enable_testing()
 
