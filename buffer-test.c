@@ -432,5 +432,54 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
+	//resizing a heap buffer
+	buffer_t *resize_buffer = buffer_create_on_heap(20, 20);
+	status = buffer_clone_from_raw(resize_buffer, (unsigned char*)"1234567890ABCDEFGHI", 20);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to clone raw buffer. (%i)\n", status);
+		buffer_destroy_from_heap(resize_buffer);
+		return status;
+	}
+
+	//shrink
+	status = buffer_resize_on_heap(&resize_buffer, 1);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to shrink buffer. (%i)\n", status);
+		buffer_destroy_from_heap(resize_buffer);
+		return status;
+	}
+	if ((resize_buffer->buffer_length != 4) || (resize_buffer->content_length != 1)) {
+		fprintf(stderr, "ERROR: Shrinked buffer has incorrect lengths.\n");
+		buffer_destroy_from_heap(resize_buffer);
+		return EXIT_FAILURE;
+	}
+
+	//grow
+	status = buffer_resize_on_heap(&resize_buffer, 4);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to grow buffer. (%i)\n", status);
+		buffer_destroy_from_heap(resize_buffer);
+		return status;
+	}
+	if ((resize_buffer->buffer_length != 4) || (resize_buffer->content_length != 1)) {
+		fprintf(stderr, "ERROR: Grown buffer has incorrect lengths!\n");
+		buffer_destroy_from_heap(resize_buffer);
+		return EXIT_FAILURE;
+	}
+
+	//grow again
+	status = buffer_resize_on_heap(&resize_buffer, 10);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to grow buffer. (%i)\n", status);
+		buffer_destroy_from_heap(resize_buffer);
+		return status;
+	}
+	if ((resize_buffer->buffer_length != 14) || (resize_buffer->content_length != 1)) {
+		fprintf(stderr, "ERROR: Grown buffer has incorrect lengths!\n");
+		buffer_destroy_from_heap(resize_buffer);
+		return EXIT_FAILURE;
+	}
+	buffer_destroy_from_heap(resize_buffer);
+
 	return EXIT_SUCCESS;
 }

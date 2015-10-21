@@ -101,7 +101,7 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) __attribute
 /*
  * Macro to free and clear a heap allocated buffer.
  */
-#define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free(buffer)
+#define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free(buffer);
 
 /*
  * Macro to create a buffer with already existing data without cloning it.
@@ -258,4 +258,13 @@ int buffer_memset_partial(
 void buffer_memset(
 		buffer_t * const buffer,
 		const unsigned char character);
+
+/*
+ * Resize a heap allocated buffer to a new length.
+ *
+ * This reduces the content length if the new size is smaller.
+ */
+int buffer_resize_on_heap(
+		buffer_t ** buffer,
+		const size_t new_size) __attribute__((warn_unused_result));
 #endif

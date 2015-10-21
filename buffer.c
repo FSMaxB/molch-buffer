@@ -186,6 +186,10 @@ int buffer_copy(
 		return 0;
 	}
 
+	if ((destination->content == NULL) || (source->content == NULL)) {
+		return -11;
+	}
+
 	memcpy(destination->content + destination_offset, source->content + source_offset, copy_length);
 	destination->content_length = (destination->content_length > destination_offset + copy_length)
 		? destination->content_length
@@ -498,3 +502,50 @@ void buffer_memset(
 	status = buffer_memset_partial(buffer, character, buffer->content_length);
 }
 
+/*
+ * Resize a heap allocated buffer to a new length.
+ *
+ * This reduces the content length if the new size is smaller.
+ */
+int buffer_resize_on_heap(
+		buffer_t ** const buffer_pointer,
+		const size_t new_size) {
+	buffer_t *old_buffer = *buffer_pointer;
+	size_t new_buffer_size;
+	//if buffer is resized to 1/10th of it's original size, reallocate
+	//to 1/5th
+	if (new_size < (old_buffer->buffer_length / 10)) {
+		new_buffer_size = old_buffer->buffer_length / 5;
+	} else if (new_size > old_buffer->buffer_length){
+		//if new size is bigger, resize to new_size + buffer_length
+		new_buffer_size = new_size + old_buffer->buffer_length;
+	} else {
+		//nothing to do because new_size is less or equal than the buffer_length
+		return 0;
+	}
+
+	size_t content_length = old_buffer->content_length;
+	if (new_size < content_length) { //cut off content if necessary
+		content_length = new_size;
+	}
+
+	//allocate new content
+	buffer_t *new_buffer = buffer_create_on_heap(new_buffer_size, content_length);
+	if (new_buffer == NULL) {
+		return -11;
+	}
+
+	int status = buffer_copy(new_buffer, 0, old_buffer, 0, content_length);
+	if (status != 0) {
+		buffer_destroy_from_heap(new_buffer);
+		return status;
+	}
+
+	new_buffer->readonly = old_buffer->readonly;
+
+	buffer_destroy_from_heap(old_buffer);
+
+	*buffer_pointer = new_buffer;
+
+	return 0;
+}
