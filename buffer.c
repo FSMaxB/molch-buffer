@@ -73,6 +73,29 @@ buffer_t* buffer_init_with_pointer(
 }
 
 /*
+ * Create a new buffer on the heap.
+ */
+buffer_t *buffer_create_on_heap(
+		const size_t buffer_length,
+		const size_t content_length) {
+	buffer_t *buffer = malloc(sizeof(buffer_t));
+	if (buffer == NULL) {
+		return NULL;
+	}
+	unsigned char *content = malloc(buffer_length);
+	if (content == NULL) {
+		free(buffer);
+		return NULL;
+	}
+
+	return buffer_init_with_pointer(
+			buffer,
+			content,
+			buffer_length,
+			content_length);
+}
+
+/*
  * Create hexadecimal string from a buffer.
  *
  * The output buffer has to be at least twice
@@ -517,45 +540,51 @@ void buffer_memset(
  * This reduces the content length if the new size is smaller.
  */
 int buffer_resize_on_heap(
-		buffer_t ** const buffer_pointer,
+		buffer_t * const buffer,
 		const size_t new_size) {
-	buffer_t *old_buffer = *buffer_pointer;
 	size_t new_buffer_size;
 	//if buffer is resized to 1/10th of it's original size, reallocate
 	//to 1/5th
-	if (new_size < (old_buffer->buffer_length / 10)) {
-		new_buffer_size = old_buffer->buffer_length / 5;
-	} else if (new_size > old_buffer->buffer_length){
+	if (new_size < (buffer->buffer_length / 10)) {
+		new_buffer_size = buffer->buffer_length / 5;
+	} else if (new_size > buffer->buffer_length){
 		//if new size is bigger, resize to new_size + buffer_length
-		new_buffer_size = new_size + old_buffer->buffer_length;
+		new_buffer_size = new_size + buffer->buffer_length;
 	} else {
 		//nothing to do because new_size is less or equal than the buffer_length
 		return 0;
 	}
 
-	size_t content_length = old_buffer->content_length;
+	size_t content_length = buffer->content_length;
 	if (new_size < content_length) { //cut off content if necessary
 		content_length = new_size;
 	}
 
 	//allocate new content
-	buffer_t *new_buffer = buffer_create_on_heap(new_buffer_size, content_length);
-	if (new_buffer == NULL) {
+	unsigned char *content = malloc(new_buffer_size);
+	if (content == NULL) {
 		return -11;
 	}
 
-	int status = buffer_copy(new_buffer, 0, old_buffer, 0, content_length);
+	//copy the content
+	int status = buffer_copy_to_raw(content, 0, buffer, 0, content_length);
 	if (status != 0) {
-		buffer_destroy_from_heap(new_buffer);
+		sodium_memzero(content, content_length);
+		free(content);
 		return status;
 	}
 
-	new_buffer->readonly = old_buffer->readonly;
-	new_buffer->position = old_buffer->position;
+	//replace content pointer
+	sodium_memzero(buffer->content, buffer->buffer_length);
+	free(buffer->content);
+	unsigned char **writable_content_pointer = (unsigned char**) &buffer->content;
+	*writable_content_pointer = content;
 
-	buffer_destroy_from_heap(old_buffer);
+	//update buffer length
+	size_t *writable_buffer_length = (size_t*) &buffer->buffer_length;
+	*writable_buffer_length = new_buffer_size;
 
-	*buffer_pointer = new_buffer;
+	buffer->content_length = content_length;
 
 	return 0;
 }

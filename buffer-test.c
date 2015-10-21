@@ -442,7 +442,7 @@ int main(void) {
 	}
 
 	//shrink
-	status = buffer_resize_on_heap(&resize_buffer, 1);
+	status = buffer_resize_on_heap(resize_buffer, 1);
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to shrink buffer. (%i)\n", status);
 		buffer_destroy_from_heap(resize_buffer);
@@ -455,7 +455,7 @@ int main(void) {
 	}
 
 	//grow
-	status = buffer_resize_on_heap(&resize_buffer, 4);
+	status = buffer_resize_on_heap(resize_buffer, 4);
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to grow buffer. (%i)\n", status);
 		buffer_destroy_from_heap(resize_buffer);
@@ -468,7 +468,7 @@ int main(void) {
 	}
 
 	//grow again
-	status = buffer_resize_on_heap(&resize_buffer, 10);
+	status = buffer_resize_on_heap(resize_buffer, 10);
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to grow buffer. (%i)\n", status);
 		buffer_destroy_from_heap(resize_buffer);

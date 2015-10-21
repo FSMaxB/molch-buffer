@@ -58,10 +58,11 @@ buffer_t* buffer_init_with_pointer(
 #define buffer_create(buffer_length, content_length) buffer_init(alloca(sizeof(buffer_t) + buffer_length), buffer_length, content_length)
 
 /*
- * Macro to create a new buffer on the heap.
+ * Create a new buffer on the heap.
  */
-//FIXME: What if malloc returns NULL?
-#define buffer_create_on_heap(buffer_length, content_length) buffer_init(malloc(sizeof(buffer_t) + buffer_length), buffer_length, content_length)
+buffer_t *buffer_create_on_heap(
+		const size_t buffer_length,
+		const size_t content_length) __attribute__((warn_unused_result));
 
 /*
  * Copy a raw array to a buffer and return the
@@ -101,7 +102,7 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) __attribute
 /*
  * Macro to free and clear a heap allocated buffer.
  */
-#define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free(buffer);
+#define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free(buffer->content); free(buffer)
 
 /*
  * Macro to create a buffer with already existing data without cloning it.
@@ -265,6 +266,6 @@ void buffer_memset(
  * This reduces the content length if the new size is smaller.
  */
 int buffer_resize_on_heap(
-		buffer_t ** buffer,
+		buffer_t * buffer,
 		const size_t new_size) __attribute__((warn_unused_result));
 #endif
