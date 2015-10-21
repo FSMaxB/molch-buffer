@@ -130,6 +130,7 @@ void buffer_clear(buffer_t *buffer) {
 	}
 	sodium_memzero(buffer->content, buffer->buffer_length);
 	buffer->content_length = 0;
+	buffer->position = 0;
 }
 
 /*
@@ -218,12 +219,20 @@ int buffer_clone(
 
 	destination->content_length = source->content_length;
 
-	return buffer_copy(
+	int status = buffer_copy(
 			destination,
 			0,
 			source,
 			0,
 			source->content_length);
+	if (status != 0) {
+		buffer_clear(destination);
+		return status;
+	}
+
+	destination->position = source->position;
+
+	return status;
 }
 
 /*
@@ -542,6 +551,7 @@ int buffer_resize_on_heap(
 	}
 
 	new_buffer->readonly = old_buffer->readonly;
+	new_buffer->position = old_buffer->position;
 
 	buffer_destroy_from_heap(old_buffer);
 
