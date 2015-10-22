@@ -535,41 +535,28 @@ void buffer_memset(
 }
 
 /*
- * Resize a heap allocated buffer to a new length.
+ * Grow a heap allocated buffer to a new length.
  *
- * This reduces the content length if the new size is smaller.
+ * Does nothing if the new size is smaller than the buffer.
  */
-int buffer_resize_on_heap(
+int buffer_grow_on_heap(
 		buffer_t * const buffer,
 		const size_t new_size) {
-	size_t new_buffer_size;
-	//if buffer is resized to 1/10th of it's original size, reallocate
-	//to 1/5th
-	if (new_size < (buffer->buffer_length / 10)) {
-		new_buffer_size = buffer->buffer_length / 5;
-	} else if (new_size > buffer->buffer_length){
-		//if new size is bigger, resize to new_size + buffer_length
-		new_buffer_size = new_size + buffer->buffer_length;
-	} else {
-		//nothing to do because new_size is less or equal than the buffer_length
+	if (new_size <= buffer->buffer_length) {
+		//nothing to do
 		return 0;
 	}
 
-	size_t content_length = buffer->content_length;
-	if (new_size < content_length) { //cut off content if necessary
-		content_length = new_size;
-	}
-
 	//allocate new content
-	unsigned char *content = malloc(new_buffer_size);
+	unsigned char *content = malloc(new_size);
 	if (content == NULL) {
 		return -11;
 	}
 
 	//copy the content
-	int status = buffer_copy_to_raw(content, 0, buffer, 0, content_length);
+	int status = buffer_copy_to_raw(content, 0, buffer, 0, buffer->content_length);
 	if (status != 0) {
-		sodium_memzero(content, content_length);
+		sodium_memzero(content, buffer->content_length);
 		free(content);
 		return status;
 	}
@@ -582,9 +569,7 @@ int buffer_resize_on_heap(
 
 	//update buffer length
 	size_t *writable_buffer_length = (size_t*) &buffer->buffer_length;
-	*writable_buffer_length = new_buffer_size;
-
-	buffer->content_length = content_length;
+	*writable_buffer_length = new_size;
 
 	return 0;
 }

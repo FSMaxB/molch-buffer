@@ -261,11 +261,11 @@ void buffer_memset(
 		const unsigned char character);
 
 /*
- * Resize a heap allocated buffer to a new length.
+ * Grow a heap allocated buffer to a new length.
  *
- * This reduces the content length if the new size is smaller.
+ * Does nothing if the new size is smaller than the buffer.
  */
-int buffer_resize_on_heap(
+int buffer_grow_on_heap(
 		buffer_t * buffer,
 		const size_t new_size) __attribute__((warn_unused_result));
 #endif
