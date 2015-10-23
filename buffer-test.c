@@ -73,6 +73,10 @@ int main(void) {
 	buffer_t *heap_buffer = buffer_create_on_heap(10, 0);
 	buffer_destroy_from_heap(heap_buffer);
 
+	//zero length heap buffer
+	heap_buffer = buffer_create_on_heap(0, 0);
+	buffer_destroy_from_heap(heap_buffer);
+
 	//create a new buffer
 	buffer_t *buffer1 = buffer_create(14, 10);
 	unsigned char buffer1_content[10];

@@ -82,10 +82,14 @@ buffer_t *buffer_create_on_heap(
 	if (buffer == NULL) {
 		return NULL;
 	}
-	unsigned char *content = malloc(buffer_length);
-	if (content == NULL) {
-		free(buffer);
-		return NULL;
+
+	unsigned char *content = NULL;
+	if (buffer_length != 0) {
+		content = malloc(buffer_length);
+		if (content == NULL) {
+			free(buffer);
+			return NULL;
+		}
 	}
 
 	return buffer_init_with_pointer(
