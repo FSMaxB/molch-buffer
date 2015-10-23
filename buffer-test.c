@@ -390,7 +390,7 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
-	//test accessing a buffer at ->position
+	//test reading a buffer at ->position
 	buffer_with_array->position = 4;
 	if (buffer_get_char_at_pos(buffer_with_array) != 'o') {
 		fprintf(stderr, "ERROR: Failed to access buffer at ->position.\n");
@@ -399,6 +399,23 @@ int main(void) {
 	buffer_with_array->position = 20;
 	if (buffer_get_char_at_pos(buffer_with_array) != '\0') {
 		fprintf(stderr, "ERROR: Failed to prevent out of bounds read when accessing buffer at position.\n");
+		return EXIT_FAILURE;
+	}
+
+	//test writing a buffer at ->position
+	buffer_with_array->position = 4;
+	status = buffer_set_char_at_pos(buffer_with_array, '0');
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to write to buffer at ->position. (%i)\n", status);
+		return  EXIT_FAILURE;
+	}
+	if (buffer_with_array->content[buffer_with_array->position] != '0') {
+		fprintf(stderr, "ERROR: Failed to write to buffer at ->position. (%i)\n", status);
+		return  EXIT_FAILURE;
+	}
+	buffer_with_array->position = 20;
+	if (buffer_set_char_at_pos(buffer_with_array, 'x') == 0) {
+		fprintf(stderr, "ERROR: Failed to detect out of bounds write at ->position.\n");
 		return EXIT_FAILURE;
 	}
 

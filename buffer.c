@@ -586,3 +586,16 @@ unsigned char buffer_get_char_at_pos(const buffer_t * const buffer) {
 
 	return buffer->content[buffer->position];
 }
+
+/*
+ * Set a character at buffer->position.
+ *
+ * Returns 0 if not out of bounds.
+ */
+int buffer_set_char_at_pos(buffer_t * const buffer, const unsigned char character) {
+	if ((buffer->position > buffer->buffer_length) || (buffer->position > buffer->content_length)) {
+		return -6;
+	}
+	buffer->content[buffer->position] = character;
+	return 0;
+}

@@ -275,4 +275,11 @@ int buffer_grow_on_heap(
  * Returns '\0' when out of bounds.
  */
 unsigned char buffer_get_char_at_pos(const buffer_t * const buffer);
+
+/*
+ * Set a character at buffer->position.
+ *
+ * Returns 0 if not out of bounds.
+ */
+int buffer_set_char_at_pos(buffer_t * const buffer, const unsigned char character);
 #endif
