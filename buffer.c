@@ -573,3 +573,16 @@ int buffer_grow_on_heap(
 
 	return 0;
 }
+
+/*
+ * Get the content of a buffer at buffer->position.
+ *
+ * Returns '\0' when out of bounds.
+ */
+unsigned char buffer_get_char_at_pos(const buffer_t * const buffer) {
+	if ((buffer->position > buffer->content_length) || (buffer->position > buffer->buffer_length)) {
+		return '\0';
+	}
+
+	return buffer->content[buffer->position];
+}

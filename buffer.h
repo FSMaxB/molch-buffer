@@ -268,4 +268,11 @@ void buffer_memset(
 int buffer_grow_on_heap(
 		buffer_t * buffer,
 		const size_t new_size) __attribute__((warn_unused_result));
+
+/*
+ * Get the content of a buffer at buffer->position.
+ *
+ * Returns '\0' when out of bounds.
+ */
+unsigned char buffer_get_char_at_pos(const buffer_t * const buffer);
 #endif

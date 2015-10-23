@@ -390,6 +390,18 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
+	//test accessing a buffer at ->position
+	buffer_with_array->position = 4;
+	if (buffer_get_char_at_pos(buffer_with_array) != 'o') {
+		fprintf(stderr, "ERROR: Failed to access buffer at ->position.\n");
+		return EXIT_FAILURE;
+	}
+	buffer_with_array->position = 20;
+	if (buffer_get_char_at_pos(buffer_with_array) != '\0') {
+		fprintf(stderr, "ERROR: Failed to prevent out of bounds read when accessing buffer at position.\n");
+		return EXIT_FAILURE;
+	}
+
 	//test character access
 	buffer_t *character_buffer = buffer_create(4,3);
 	buffer_t *test_buffer = buffer_create_from_string("Hi");
