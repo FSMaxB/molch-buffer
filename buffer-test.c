@@ -392,19 +392,19 @@ int main(void) {
 
 	//test reading a buffer at ->position
 	buffer_with_array->position = 4;
-	if (buffer_get_char_at_pos(buffer_with_array) != 'o') {
+	if (buffer_get_at_pos(buffer_with_array) != 'o') {
 		fprintf(stderr, "ERROR: Failed to access buffer at ->position.\n");
 		return EXIT_FAILURE;
 	}
 	buffer_with_array->position = 20;
-	if (buffer_get_char_at_pos(buffer_with_array) != '\0') {
+	if (buffer_get_at_pos(buffer_with_array) != '\0') {
 		fprintf(stderr, "ERROR: Failed to prevent out of bounds read when accessing buffer at position.\n");
 		return EXIT_FAILURE;
 	}
 
 	//test writing a buffer at ->position
 	buffer_with_array->position = 4;
-	status = buffer_set_char_at_pos(buffer_with_array, '0');
+	status = buffer_set_at_pos(buffer_with_array, '0');
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to write to buffer at ->position. (%i)\n", status);
 		return  EXIT_FAILURE;
@@ -414,7 +414,7 @@ int main(void) {
 		return  EXIT_FAILURE;
 	}
 	buffer_with_array->position = 20;
-	if (buffer_set_char_at_pos(buffer_with_array, 'x') == 0) {
+	if (buffer_set_at_pos(buffer_with_array, 'x') == 0) {
 		fprintf(stderr, "ERROR: Failed to detect out of bounds write at ->position.\n");
 		return EXIT_FAILURE;
 	}
@@ -422,22 +422,22 @@ int main(void) {
 	//test character access
 	buffer_t *character_buffer = buffer_create(4,3);
 	buffer_t *test_buffer = buffer_create_from_string("Hi");
-	status = buffer_set_char_at(character_buffer, 0, 'H');
+	status = buffer_set_at(character_buffer, 0, 'H');
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to set character at given position. (%i)\n", status);
 		return status;
 	}
-	status = buffer_set_char_at(character_buffer, 1, 'i');
+	status = buffer_set_at(character_buffer, 1, 'i');
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to set character at given position. (%i)\n", status);
 		return status;
 	}
-	status = buffer_set_char_at(character_buffer, 2, '\0');
+	status = buffer_set_at(character_buffer, 2, '\0');
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to set character at given position. (%i)\n", status);
 		return status;
 	}
-	status = buffer_set_char_at(character_buffer, 3, '!');
+	status = buffer_set_at(character_buffer, 3, '!');
 	if (status == 0) {
 		fprintf(stderr, "ERROR: Failed to detect out of bound write to buffer.\n");
 		return EXIT_FAILURE;

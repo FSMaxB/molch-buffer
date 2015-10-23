@@ -476,7 +476,7 @@ int buffer_xor(
 /*
  * Set a single character in a buffer.
  */
-int buffer_set_char_at(
+int buffer_set_at(
 		const buffer_t * const buffer,
 		const size_t pos,
 		const unsigned char character) {
@@ -579,7 +579,7 @@ int buffer_grow_on_heap(
  *
  * Returns '\0' when out of bounds.
  */
-unsigned char buffer_get_char_at_pos(const buffer_t * const buffer) {
+unsigned char buffer_get_at_pos(const buffer_t * const buffer) {
 	if ((buffer->position > buffer->content_length) || (buffer->position > buffer->buffer_length)) {
 		return '\0';
 	}
@@ -592,7 +592,7 @@ unsigned char buffer_get_char_at_pos(const buffer_t * const buffer) {
  *
  * Returns 0 if not out of bounds.
  */
-int buffer_set_char_at_pos(buffer_t * const buffer, const unsigned char character) {
+int buffer_set_at_pos(buffer_t * const buffer, const unsigned char character) {
 	if ((buffer->position > buffer->buffer_length) || (buffer->position > buffer->content_length)) {
 		return -6;
 	}
