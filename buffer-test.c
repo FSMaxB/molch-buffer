@@ -501,5 +501,13 @@ int main(void) {
 	}
 	buffer_destroy_from_heap(resize_buffer);
 
+	//create buffer from string on heap
+	buffer_t *string_on_heap = buffer_create_from_string_on_heap("Hello world!");
+	if (sodium_memcmp(string_on_heap->content, "Hello world!", sizeof("Hello world!")) != 0) {
+		fprintf(stderr, "ERROR: Failed to create buffer from string on heap!\n");
+		return EXIT_FAILURE;
+	}
+	buffer_destroy_from_heap(string_on_heap);
+
 	return EXIT_SUCCESS;
 }

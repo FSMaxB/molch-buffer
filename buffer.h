@@ -84,6 +84,11 @@ buffer_t* buffer_create_from_string_helper(
 #define buffer_create_from_string(string) buffer_create_from_string_helper(buffer_create(sizeof(string), sizeof(string)), (unsigned char*) string, sizeof(string))
 
 /*
+ * Create a new buffer from a string literal on heap.
+ */
+#define buffer_create_from_string_on_heap(string) buffer_create_from_string_helper(buffer_create_on_heap(sizeof(string), sizeof(string)), (unsigned char*) string, sizeof(string))
+
+/*
  * Clear a buffer.
  *
  * Overwrites the buffer with zeroes and
