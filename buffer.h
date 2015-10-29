@@ -225,6 +225,11 @@ int buffer_compare_to_raw(
 		const size_t array_length) __attribute__((warn_unused_result));
 
 /*
+ * Macro to compare a buffer to a string.
+ */
+#define buffer_compare_to_string(buffer, string) buffer_compare_to_raw(buffer, (unsigned char*)string, sizeof(string))
+
+/*
  * Compare parts of two buffers.
  *
  * Returns 0 if both buffers match.

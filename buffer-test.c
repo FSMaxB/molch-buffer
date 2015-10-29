@@ -526,6 +526,11 @@ int main(void) {
 		fprintf(stderr, "ERROR: Failed to detect difference in buffer and array.\n");
 		return EXIT_FAILURE;
 	}
+	status = buffer_compare_to_string(true_buffer, "true");
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to use macro to compare buffer to string! (%i)\n", status);
+		return status;
+	}
 
 	return EXIT_SUCCESS;
 }
