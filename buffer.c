@@ -400,17 +400,7 @@ int buffer_compare_to_raw(
 		const buffer_t * const buffer,
 		const unsigned char * const array,
 		const size_t array_length) {
-	if (buffer->content_length != array_length) {
-		//FIXME: Does this introduce a sidechannel? This can leak the information that
-		//the size of two buffers doesn't match.
-		return -1;
-	}
-
-	if (array_length == 0) {
-		return 0;
-	}
-
-	return sodium_memcmp(buffer->content, array, array_length);
+	return buffer_compare_to_raw_partial(buffer, 0, array, array_length, 0, buffer->content_length);
 }
 
 /*
@@ -424,20 +414,7 @@ int buffer_compare_partial(
 		const buffer_t * const buffer2,
 		const size_t position2,
 		const size_t length) {
-	if (((buffer1->content_length + position1) < length) || ((buffer2->content_length + position2) < length)) {
-		//buffers don't match the length of the comparison
-		return -6;
-	}
-
-	if ((buffer1->buffer_length == 0) || (buffer2->buffer_length == 0)) {
-		if (length == 0) {
-			return 0;
-		} else {
-			return -1;
-		}
-	}
-
-	return sodium_memcmp(buffer1->content + position1, buffer2->content + position2, length);
+	return buffer_compare_to_raw_partial(buffer1, position1, buffer2->content, buffer2->content_length, position2, length);
 }
 
 /*
@@ -453,6 +430,7 @@ int buffer_compare_to_raw_partial(
 		const size_t position2,
 		const size_t comparison_length) {
 	if (((buffer->content_length + position1) < comparison_length) || ((array_length + position2) < comparison_length)) {
+		//FIXME: Does this introduce a timing sidechannel? This leaks the information that two buffers don't have the same length
 		//buffers are too short
 		return -6;
 	}
