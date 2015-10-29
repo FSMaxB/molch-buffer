@@ -388,17 +388,29 @@ int buffer_clone_to_raw(
 int buffer_compare(
 		const buffer_t * const buffer1,
 		const buffer_t * const buffer2) {
-	if (buffer1->content_length != buffer2->content_length) {
+	return buffer_compare_to_raw(buffer1, buffer2->content, buffer2->content_length);
+}
+
+/*
+ * Compare a buffer to a raw array.
+ *
+ * Returns 0 if both buffers match.
+ */
+int buffer_compare_to_raw(
+		const buffer_t * const buffer,
+		const unsigned char * const array,
+		const size_t array_length) {
+	if (buffer->content_length != array_length) {
 		//FIXME: Does this introduce a sidechannel? This can leak the information that
 		//the size of two buffers doesn't match.
 		return -1;
 	}
 
-	if (buffer1->buffer_length == 0) {
+	if (array_length == 0) {
 		return 0;
 	}
 
-	return sodium_memcmp(buffer1->content, buffer2->content, buffer1->content_length);
+	return sodium_memcmp(buffer->content, array, array_length);
 }
 
 /*

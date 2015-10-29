@@ -215,6 +215,16 @@ int buffer_compare(
 		const buffer_t * const buffer2) __attribute__((warn_unused_result));
 
 /*
+ * Compare a buffer to a raw array.
+ *
+ * Returns 0 if both buffers match.
+ */
+int buffer_compare_to_raw(
+		const buffer_t * const buffer,
+		const unsigned char * const array,
+		const size_t array_length) __attribute__((warn_unused_result));
+
+/*
  * Compare parts of two buffers.
  *
  * Returns 0 if both buffers match.

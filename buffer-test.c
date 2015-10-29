@@ -509,5 +509,23 @@ int main(void) {
 	}
 	buffer_destroy_from_heap(string_on_heap);
 
+	//compare buffer to an array
+	buffer_t *true_buffer = buffer_create_from_string("true");
+	status = buffer_compare_to_raw(true_buffer, (unsigned char*)"true", sizeof("true"));
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to compare buffer to array! (%i)\n", status);
+		return status;
+	}
+	status = buffer_compare_to_raw(true_buffer, (unsigned char*)"fals", sizeof("fals"));
+	if (status != -1) {
+		fprintf(stderr, "ERROR: Failed to detect difference in buffer and array.\n");
+		return EXIT_FAILURE;
+	}
+	status = buffer_compare_to_raw(true_buffer, (unsigned char*)"false", sizeof("false"));
+	if (status != -1) {
+		fprintf(stderr, "ERROR: Failed to detect difference in buffer and array.\n");
+		return EXIT_FAILURE;
+	}
+
 	return EXIT_SUCCESS;
 }
