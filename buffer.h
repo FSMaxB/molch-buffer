@@ -242,6 +242,19 @@ int buffer_compare_partial(
 		const size_t length) __attribute__((warn_unused_result));
 
 /*
+ * Compare parts of a buffer to parts of a raw array.
+ *
+ * Returns 0 if both buffers match.
+ */
+int buffer_compare_to_raw_partial(
+		const buffer_t * const buffer,
+		const size_t position1,
+		const unsigned char * const array,
+		const size_t array_length,
+		const size_t position2,
+		const size_t comparison_length);
+
+/*
  * Fill a buffer with random numbers.
  */
 int buffer_fill_random(

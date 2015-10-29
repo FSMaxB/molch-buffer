@@ -63,6 +63,15 @@ int main(void) {
 		buffer_clear(string4);
 		return EXIT_FAILURE;
 	}
+	if ((buffer_compare_to_raw_partial(string1, 0, string4->content, string4->content_length, 0, 4) != 0)
+			|| (buffer_compare_to_raw_partial(string1, 2, string3->content, string3->content_length, 2, 2) != 0)) {
+		fprintf(stderr, "ERROR: buffer_compare_to_raw_partial doesn't work as expected\n");
+		buffer_clear(string1);
+		buffer_clear(string2);
+		buffer_clear(string3);
+		buffer_clear(string4);
+		return EXIT_FAILURE;
+	}
 	buffer_clear(string1);
 	buffer_clear(string2);
 	buffer_clear(string3);

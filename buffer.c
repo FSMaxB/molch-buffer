@@ -441,6 +441,34 @@ int buffer_compare_partial(
 }
 
 /*
+ * Compare parts of a buffer to parts of a raw array.
+ *
+ * Returns 0 if both buffers match.
+ */
+int buffer_compare_to_raw_partial(
+		const buffer_t * const buffer,
+		const size_t position1,
+		const unsigned char * const array,
+		const size_t array_length,
+		const size_t position2,
+		const size_t comparison_length) {
+	if (((buffer->content_length + position1) < comparison_length) || ((array_length + position2) < comparison_length)) {
+		//buffers are too short
+		return -6;
+	}
+
+	if ((buffer->buffer_length == 0) || (array_length == 0)) {
+		if (comparison_length == 0) {
+			return 0;
+		} else {
+			return -1;
+		}
+	}
+
+	return sodium_memcmp(buffer->content + position1, array + position2, comparison_length);
+}
+
+/*
  * Fill a buffer with random numbers.
  */
 int buffer_fill_random(
