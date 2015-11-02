@@ -34,7 +34,10 @@ void print_hex(buffer_t *data) {
 }
 
 int main(void) {
-	sodium_init();
+	if (sodium_init() == -1) {
+		fprintf(stderr, "ERROR: Failed to initialize libsodium!\n");
+		return -1;
+	}
 
 	//test comparison function
 	buffer_t *string1 = buffer_create_from_string("1234");
