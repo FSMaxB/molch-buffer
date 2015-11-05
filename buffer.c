@@ -429,7 +429,7 @@ int buffer_compare_to_raw_partial(
 		const size_t array_length,
 		const size_t position2,
 		const size_t comparison_length) {
-	if (((buffer->content_length + position1) < comparison_length) || ((array_length + position2) < comparison_length)) {
+	if (((buffer->content_length - position1) < comparison_length) || ((array_length - position2) < comparison_length)) {
 		//FIXME: Does this introduce a timing sidechannel? This leaks the information that two buffers don't have the same length
 		//buffers are too short
 		return -6;

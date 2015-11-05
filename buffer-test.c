@@ -543,6 +543,11 @@ int main(void) {
 		fprintf(stderr, "ERROR: Failed to use macro to compare buffer to string! (%i)\n", status);
 		return status;
 	}
+	status = buffer_compare_to_raw_partial(true_buffer, 3, (unsigned char*)"true", sizeof("true"), 0, 3);
+	if (status == 0) {
+		fprintf(stderr, "ERROR: Failed to detect out of bounds read when comparing buffers!\n");
+		return EXIT_FAILURE;
+	}
 
 	return EXIT_SUCCESS;
 }
