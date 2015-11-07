@@ -18,6 +18,7 @@
 
 #include <alloca.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #ifndef LIB_BUFFER_H
 #define LIB_BUFFER_H
