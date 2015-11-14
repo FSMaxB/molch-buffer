@@ -1,5 +1,11 @@
 cmake_minimum_required (VERSION 2.6)
 
+GET_PROPERTY(MOLCH_BUFFER GLOBAL PROPERTY MOLCH_BUFFER)
+if (MOLCH_BUFFER)
+    return()
+endif (MOLCH_BUFFER)
+SET_PROPERTY(GLOBAL PROPERTY MOLCH_BUFFER "true")
+
 project (molch-buffer)
 
 set(CMAKE_BUILD_TYPE Debug)
