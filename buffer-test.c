@@ -549,5 +549,21 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
+	//clone buffer to hex
+	buffer_t *newline = buffer_create_from_string("\r\n");
+	buffer_t *newline_hex = buffer_create(2 * newline->content_length + 1, 0);
+
+	status = buffer_clone_as_hex(newline_hex, newline);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to clone buffer as hex digits. (%i)\n", status);
+		return status;
+	}
+
+	if (buffer_compare(buffer_create_from_string("0d0a00"), newline_hex) != 0) {
+		fprintf(stderr, "ERROR: Buffer cloned as hex is incorrect.");
+		return EXIT_FAILURE;
+	}
+	printf("Hex-Buffer: %.*s\n", (int)newline_hex->content_length, (char*)newline_hex->content);
+
 	return EXIT_SUCCESS;
 }

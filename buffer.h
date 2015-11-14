@@ -184,6 +184,14 @@ int buffer_clone_from_raw(
 		const size_t length) __attribute__((warn_unused_result));
 
 /*
+ * Write the contents of a buffer into another buffer as hexadecimal digits.
+ * Note that the destination buffer needs to be twice the size of the source buffers content.
+ */
+int buffer_clone_as_hex(
+		buffer_t * const destination,
+		const buffer_t * const source) __attribute((warn_unused_result));
+
+/*
  * Copy from a buffer to a raw array.
  *
  * Returns 0 on success.
