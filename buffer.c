@@ -335,6 +335,10 @@ int buffer_clone_from_raw(
 int buffer_clone_as_hex(
 		buffer_t * const destination,
 		const buffer_t * const source) {
+	if ((destination == NULL) || (source == NULL)) {
+		return -1;
+	}
+
 	if (destination->readonly) {
 		return -5;
 	}
