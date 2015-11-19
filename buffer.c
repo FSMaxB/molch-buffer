@@ -329,6 +329,50 @@ int buffer_clone_from_raw(
 }
 
 /*
+ * Write the contents of a buffer with hexadecimal digits to a buffer with
+ * binary data.
+ * The destination buffer size needs to be at least half the size of the input.
+ */
+int buffer_clone_from_hex(
+		buffer_t * const destination,
+		const buffer_t * const source) {
+	if ((destination == NULL) || (source == NULL)) {
+		return -1;
+	}
+
+	if (destination->readonly) {
+		return -5;
+	}
+
+	destination->content_length = 0;
+
+	if (destination->buffer_length < (source->content_length / 2)) {
+		return -6;
+	}
+
+	size_t length; //number of bytes written
+	int status = sodium_hex2bin(
+				destination->content, destination->buffer_length,
+				(const char*) source->content, source->content_length,
+				NULL,
+				&length,
+				NULL);
+	if (status != 0) {
+		buffer_clear(destination);
+		return -7;
+	}
+
+	if (length != (source->content_length / 2)) {
+		buffer_clear(destination);
+		return -8;
+	}
+
+	destination->content_length = length;
+
+	return 0;
+}
+
+/*
  * Write the contents of a buffer into another buffer as hexadecimal digits.
  * Note that the destination buffer needs to be twice the size of the source buffers content plus one.
  */

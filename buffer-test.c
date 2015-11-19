@@ -560,10 +560,23 @@ int main(void) {
 	}
 
 	if (buffer_compare(buffer_create_from_string("0d0a00"), newline_hex) != 0) {
-		fprintf(stderr, "ERROR: Buffer cloned as hex is incorrect.");
+		fprintf(stderr, "ERROR: Buffer cloned as hex is incorrect.\n");
 		return EXIT_FAILURE;
 	}
 	printf("Hex-Buffer: %.*s\n", (int)newline_hex->content_length, (char*)newline_hex->content);
+
+	//clone buffer from hex
+	buffer_clear(newline);
+	status = buffer_clone_from_hex(newline, newline_hex);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Failed to clone buffer from hex digits. (%i)\n", status);
+		return status;
+	}
+
+	if (buffer_compare(buffer_create_from_string("\r\n"), newline) != 0) {
+		fprintf(stderr, "ERROR: Buffer cloned from hex is incorrect.\n");
+		return EXIT_FAILURE;
+	}
 
 	return EXIT_SUCCESS;
 }
