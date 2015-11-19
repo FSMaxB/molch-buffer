@@ -350,6 +350,7 @@ int buffer_clone_as_hex(
 	}
 
 	if (sodium_bin2hex((char*)destination->content, destination->buffer_length, (const unsigned char*)source->content, source->content_length) == NULL) {
+		buffer_clear(destination);
 		return -7;
 	}
 
