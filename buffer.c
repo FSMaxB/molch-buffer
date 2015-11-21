@@ -152,7 +152,7 @@ buffer_t* buffer_create_from_string_helper(
  * resets the content size.
  */
 void buffer_clear(buffer_t *buffer) {
-	if (buffer->buffer_length == 0) {
+	if ((buffer == NULL) || (buffer->buffer_length == 0)) {
 		return;
 	}
 	sodium_memzero(buffer->content, buffer->buffer_length);
