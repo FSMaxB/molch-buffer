@@ -236,6 +236,10 @@ int buffer_copy(
 int buffer_clone(
 		buffer_t * const destination,
 		const buffer_t * const source) {
+	if ((destination == NULL) || (source == NULL)) {
+		return -1;
+	}
+
 	if (destination->readonly) {
 		return -5;
 	}
