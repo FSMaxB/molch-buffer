@@ -96,7 +96,7 @@ int main(void) {
 	memcpy(buffer1->content, buffer1_content, sizeof(buffer1_content));
 	printf("Here\n");
 
-	printf("Random buffer (%zi Bytes):\n", buffer1->content_length);
+	printf("Random buffer (%zu Bytes):\n", buffer1->content_length);
 	print_hex(buffer1);
 	putchar('\n');
 
@@ -107,7 +107,7 @@ int main(void) {
 	buffer2->content[2] = 0xbe;
 	buffer2->content[3] = 0xef;
 
-	printf("Second buffer (%zi Bytes):\n", buffer2->content_length);
+	printf("Second buffer (%zu Bytes):\n", buffer2->content_length);
 	print_hex(buffer2);
 	putchar('\n');
 
@@ -304,7 +304,7 @@ int main(void) {
 	size_t i;
 	for (i = 0; i < buffer1->buffer_length; i++) {
 		if (buffer1->content[i] != '\0') {
-			fprintf(stderr, "ERROR: Byte %zi of the buffer hasn't been erased.\n", i);
+			fprintf(stderr, "ERROR: Byte %zu of the buffer hasn't been erased.\n", i);
 			buffer_clear(buffer1);
 			buffer_clear(buffer2);
 			free(buffer2->content);
@@ -337,7 +337,7 @@ int main(void) {
 		buffer_clear(random);
 		return EXIT_FAILURE;
 	}
-	printf("Buffer with %zi random bytes:\n", random->content_length);
+	printf("Buffer with %zu random bytes:\n", random->content_length);
 	print_hex(random);
 
 	if (buffer_fill_random(random, 20) == 0) {
