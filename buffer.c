@@ -122,6 +122,15 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) {
 }
 
 /*
+ * Free and clear a heap allocated buffer.
+ */
+void buffer_destroy_from_heap(buffer_t * const buffer) {
+	buffer_clear(buffer);
+	free(buffer->content);
+	free(buffer);
+}
+
+/*
  * Copy a raw array to a buffer and return the
  * buffer.
  *

@@ -106,9 +106,9 @@ void buffer_clear(buffer_t *buffer);
 int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) __attribute__((warn_unused_result));
 
 /*
- * Macro to free and clear a heap allocated buffer.
+ * Free and clear a heap allocated buffer.
  */
-#define buffer_destroy_from_heap(buffer) buffer_clear(buffer); free((buffer)->content); free(buffer)
+void buffer_destroy_from_heap(buffer_t *buffer);
 
 /*
  * Macro to create a buffer with already existing data without cloning it.
