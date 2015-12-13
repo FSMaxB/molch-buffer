@@ -66,6 +66,16 @@ buffer_t *buffer_create_on_heap(
 		const size_t content_length) __attribute__((warn_unused_result));
 
 /*
+ * Create a new buffer with a custom allocator.
+ */
+buffer_t *buffer_create_with_custom_allocator(
+		const size_t buffer_length,
+		const size_t content_length,
+		void *(*allocator)(size_t size),
+		void (*deallocator)(void *pointer)
+		) __attribute__((warn_unused_result));
+
+/*
  * Copy a raw array to a buffer and return the
  * buffer.
  *
@@ -109,6 +119,13 @@ int buffer_to_hex(buffer_t * const hex, const buffer_t * const data) __attribute
  * Free and clear a heap allocated buffer.
  */
 void buffer_destroy_from_heap(buffer_t *buffer);
+
+/*
+ * Destroy a buffer that was created using a custom allocator.
+ */
+void buffer_destroy_with_custom_deallocator(
+		buffer_t * buffer,
+		void (*deallocator)(void *pointer));
 
 /*
  * Macro to create a buffer with already existing data without cloning it.

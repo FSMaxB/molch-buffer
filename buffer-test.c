@@ -578,5 +578,13 @@ int main(void) {
 		return EXIT_FAILURE;
 	}
 
+	//test custom allocator
+	buffer_t *custom_allocated = buffer_create_with_custom_allocator(10, 10, sodium_malloc, sodium_free);
+	if (custom_allocated == NULL) {
+		fprintf(stderr, "ERROR: Failed to create buffer with custom allocator!\n");
+		return EXIT_FAILURE;
+	}
+	buffer_destroy_with_custom_deallocator(custom_allocated, sodium_free);
+
 	return EXIT_SUCCESS;
 }

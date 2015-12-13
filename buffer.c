@@ -100,6 +100,29 @@ buffer_t *buffer_create_on_heap(
 }
 
 /*
+ * Create a new buffer with a custom allocator.
+ */
+buffer_t *buffer_create_with_custom_allocator(
+		const size_t buffer_length,
+		const size_t content_length,
+		void *(*allocator)(size_t size),
+		void (*deallocator)(void *pointer)
+		) {
+	unsigned char *content = allocator(buffer_length);
+	if (content == NULL) {
+		return NULL;
+	}
+
+	buffer_t *buffer = allocator(sizeof(buffer_t));
+	if (buffer == NULL) {
+		deallocator(content);
+		return NULL;
+	}
+
+	return buffer_init_with_pointer(buffer, content, buffer_length, content_length);
+}
+
+/*
  * Create hexadecimal string from a buffer.
  *
  * The output buffer has to be at least twice
@@ -128,6 +151,17 @@ void buffer_destroy_from_heap(buffer_t * const buffer) {
 	buffer_clear(buffer);
 	free(buffer->content);
 	free(buffer);
+}
+
+/*
+ * Destroy a buffer that was created using a custom allocator.
+ */
+void buffer_destroy_with_custom_deallocator(
+		buffer_t * buffer,
+		void (*deallocator)(void *pointer)) {
+	sodium_memzero(buffer->content, buffer->content_length);
+	deallocator(buffer->content);
+	deallocator(buffer);
 }
 
 /*
