@@ -40,19 +40,15 @@ int main(void) {
 	}
 
 	//test comparison function
-	buffer_t *string1 = buffer_create_from_string("1234");
-	buffer_t *string2 = buffer_create_from_string("1234");
-	buffer_t *string3 = buffer_create_from_string("2234");
-	buffer_t *string4 = buffer_create_from_string("12345");
+	buffer_create_from_string(string1, "1234");
+	buffer_create_from_string(string2, "1234");
+	buffer_create_from_string(string3, "2234");
+	buffer_create_from_string(string4, "12345");
 
 	if ((buffer_compare(string1, string2) != 0)
 			|| (buffer_compare(string1, string3) != -1)
 			|| (buffer_compare(string1, string4) != -1)) {
 		fprintf(stderr, "ERROR: buffer_compare doesn't work as expected\n");
-		buffer_clear(string1);
-		buffer_clear(string2);
-		buffer_clear(string3);
-		buffer_clear(string4);
 
 		return EXIT_FAILURE;
 	}
@@ -60,25 +56,13 @@ int main(void) {
 	if ((buffer_compare_partial(string1, 0, string4, 0, 4) != 0)
 			|| (buffer_compare_partial(string1, 2, string3, 2, 2) != 0)) {
 		fprintf(stderr, "ERROR: buffer_compare_partial doesn't work as expected\n");
-		buffer_clear(string1);
-		buffer_clear(string2);
-		buffer_clear(string3);
-		buffer_clear(string4);
 		return EXIT_FAILURE;
 	}
 	if ((buffer_compare_to_raw_partial(string1, 0, string4->content, string4->content_length, 0, 4) != 0)
 			|| (buffer_compare_to_raw_partial(string1, 2, string3->content, string3->content_length, 2, 2) != 0)) {
 		fprintf(stderr, "ERROR: buffer_compare_to_raw_partial doesn't work as expected\n");
-		buffer_clear(string1);
-		buffer_clear(string2);
-		buffer_clear(string3);
-		buffer_clear(string4);
 		return EXIT_FAILURE;
 	}
-	buffer_clear(string1);
-	buffer_clear(string2);
-	buffer_clear(string3);
-	buffer_clear(string4);
 	printf("Successfully tested buffer comparison ...\n");
 
 	//test heap allocated buffers
@@ -272,14 +256,7 @@ int main(void) {
 	printf("Out of bounds read detected.\n");
 
 	//create a buffer from a string
-	buffer_t *string = buffer_create_from_string("This is a string!");
-	if (string == NULL) {
-		fprintf(stderr, "ERROR: Buffer created from string is NULL!");
-		buffer_clear(buffer1);
-		buffer_clear(buffer2);
-		free(buffer2->content);
-		return EXIT_FAILURE;
-	}
+	buffer_create_from_string(string, "This is a string!");
 	if (string->content_length != sizeof("This is a string!")) {
 		fprintf(stderr, "ERROR: Buffer created from string has incorrect length.\n");
 		buffer_clear(buffer1);
@@ -354,7 +331,7 @@ int main(void) {
 	}
 
 	//test xor
-	buffer_t *text = buffer_create_from_string("Hello World!");
+	buffer_create_from_string(text, "Hello World!");
 	buffer_t *xor = buffer_create(text->content_length, text->content_length);
 	status = buffer_clone(xor, text);
 	if (status != 0) {
@@ -437,7 +414,7 @@ int main(void) {
 
 	//test character access
 	buffer_t *character_buffer = buffer_create(4,3);
-	buffer_t *test_buffer = buffer_create_from_string("Hi");
+	buffer_create_from_string(test_buffer, "Hi");
 	status = buffer_set_at(character_buffer, 0, 'H');
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to set character at given position. (%i)\n", status);
@@ -522,7 +499,7 @@ int main(void) {
 	buffer_destroy_from_heap(string_on_heap);
 
 	//compare buffer to an array
-	buffer_t *true_buffer = buffer_create_from_string("true");
+	buffer_create_from_string(true_buffer, "true");
 	status = buffer_compare_to_raw(true_buffer, (unsigned char*)"true", sizeof("true"));
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to compare buffer to array! (%i)\n", status);
@@ -550,7 +527,7 @@ int main(void) {
 	}
 
 	//clone buffer to hex
-	buffer_t *newline = buffer_create_from_string("\r\n");
+	buffer_create_from_string(newline, "\r\n");
 	buffer_t *newline_hex = buffer_create(2 * newline->content_length + 1, 0);
 
 	status = buffer_clone_as_hex(newline_hex, newline);
@@ -559,21 +536,23 @@ int main(void) {
 		return status;
 	}
 
-	if (buffer_compare(buffer_create_from_string("0d0a00"), newline_hex) != 0) {
+	buffer_create_from_string(cr_newline, "0d0a00");
+	if (buffer_compare(cr_newline, newline_hex) != 0) {
 		fprintf(stderr, "ERROR: Buffer cloned as hex is incorrect.\n");
 		return EXIT_FAILURE;
 	}
 	printf("Hex-Buffer: %.*s\n", (int)newline_hex->content_length, (char*)newline_hex->content);
 
 	//clone buffer from hex
-	buffer_clear(newline);
-	status = buffer_clone_from_hex(newline, newline_hex);
+	buffer_t *newline2 = buffer_create(sizeof(newline), sizeof(newline));
+	status = buffer_clone_from_hex(newline2, newline_hex);
 	if (status != 0) {
 		fprintf(stderr, "ERROR: Failed to clone buffer from hex digits. (%i)\n", status);
 		return status;
 	}
 
-	if (buffer_compare(buffer_create_from_string("\r\n"), newline) != 0) {
+	buffer_create_from_string(newline3, "\r\n");
+	if (buffer_compare(newline3, newline2) != 0) {
 		fprintf(stderr, "ERROR: Buffer cloned from hex is incorrect.\n");
 		return EXIT_FAILURE;
 	}

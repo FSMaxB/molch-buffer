@@ -92,7 +92,7 @@ buffer_t* buffer_create_from_string_helper(
 /*
  * Create a new buffer from a string literal.
  */
-#define buffer_create_from_string(string) buffer_create_from_string_helper(buffer_create(sizeof(string), sizeof(string)), (unsigned char*) string, sizeof(string))
+#define buffer_create_from_string(name, string) buffer_t name[1]; buffer_init_with_pointer(name, (unsigned char*) (string), sizeof(string), sizeof(string))
 
 /*
  * Create a new buffer from a string literal on heap.
