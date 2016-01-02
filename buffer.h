@@ -130,7 +130,7 @@ void buffer_destroy_with_custom_deallocator(
 /*
  * Macro to create a buffer with already existing data without cloning it.
  */
-#define buffer_create_with_existing_array(array, length) buffer_init_with_pointer(alloca(sizeof(buffer_t)), array, length, length)
+#define buffer_create_with_existing_array(name, array, length) buffer_t name[1]; buffer_init_with_pointer(name, array, length, length)
 
 /*
  * Concatenate a buffer to the first.
