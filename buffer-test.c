@@ -45,6 +45,11 @@ int main(void) {
 	buffer_create_from_string(string3, "2234");
 	buffer_create_from_string(string4, "12345");
 
+	if (!string1->readonly) {
+		fprintf(stderr, "ERROR: buffer_create_from_string doesn't create readonly buffers.\n");
+		return EXIT_FAILURE;
+	}
+
 	if ((buffer_compare(string1, string2) != 0)
 			|| (buffer_compare(string1, string3) != -1)
 			|| (buffer_compare(string1, string4) != -1)) {
