@@ -570,5 +570,46 @@ int main(void) {
 	}
 	buffer_destroy_with_custom_deallocator(custom_allocated, sodium_free);
 
+	//test buffer_fill
+	buffer_t *buffer_to_be_filled = buffer_create_on_heap(10, 0);
+
+	buffer_to_be_filled->readonly = true;
+	status = buffer_fill(buffer_to_be_filled, 'c', buffer_to_be_filled->buffer_length);
+	if (status != -1) {
+		fprintf(stderr, "ERROR: buffer_fill() did not respect the read-only attribute of the buffer. (%i)\n", status);
+		return EXIT_FAILURE;
+	}
+	buffer_to_be_filled->readonly = false;
+
+	status = buffer_fill(buffer_to_be_filled, 'c', buffer_to_be_filled->buffer_length + 1);
+	if (status != -1) {
+		fprintf(stderr, "ERROR: buffer_fill() overflowed the buffer. (%i)\n", status);
+		return EXIT_FAILURE;
+	}
+
+	status = buffer_fill(buffer_to_be_filled, 'c', buffer_to_be_filled->buffer_length);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Buffer couldn't be filled with character. (%i)\n", status);
+		return EXIT_FAILURE;
+	}
+
+	unsigned char raw_value[] = {'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c', 'c'};
+	if (buffer_compare_to_raw(buffer_to_be_filled, raw_value, sizeof(raw_value)) != 0) {
+		fprintf(stderr, "ERROR: Buffer didn't contain the correct value after filling.\n");
+		return EXIT_FAILURE;
+	}
+
+	status = buffer_fill(buffer_to_be_filled, 'c', buffer_to_be_filled->buffer_length - 1);
+	if (status != 0) {
+		fprintf(stderr, "ERROR: Buffer couldn't be filled with character. (%i)\n", status);
+		return EXIT_FAILURE;
+	}
+	if (buffer_to_be_filled->content_length != (buffer_to_be_filled->buffer_length - 1)) {
+		fprintf(stderr, "ERROR: Content length wasn't set correctly.\n");
+		return EXIT_FAILURE;
+	}
+
+	buffer_destroy_from_heap(buffer_to_be_filled);
+
 	return EXIT_SUCCESS;
 }

@@ -743,3 +743,19 @@ int buffer_set_at_pos(buffer_t * const buffer, const unsigned char character) {
 	buffer->content[buffer->position] = character;
 	return 0;
 }
+
+/*
+ * Fill a buffer with a specified amount of a given value.
+ *
+ * Returns 0 on success
+ */
+int buffer_fill(buffer_t * const buffer, const unsigned char character, size_t length) {
+	if ((buffer->readonly) || (length > buffer->buffer_length)) {
+		return -1;
+	}
+
+	memset(buffer->content, character, length);
+	buffer->content_length = length;
+
+	return 0;
+}
