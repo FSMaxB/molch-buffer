@@ -350,4 +350,11 @@ unsigned char buffer_get_at_pos(const buffer_t * const buffer);
  * Returns 0 if not out of bounds.
  */
 int buffer_set_at_pos(buffer_t * const buffer, const unsigned char character);
+
+/*
+ * Fill a buffer with a specified amount of a given value.
+ *
+ * Returns 0 on success
+ */
+int buffer_fill(buffer_t * const buffer, const unsigned char character, size_t length) __attribute__((warn_unused_result));
 #endif
