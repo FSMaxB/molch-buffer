@@ -329,7 +329,7 @@ int buffer_copy_from_raw(
 		return -7;
 	}
 
-	if ((destination->content_length < destination_offset) || (copy_length > (destination->buffer_length - destination_offset))) {
+	if ((destination->buffer_length < destination_offset) || (copy_length > (destination->buffer_length - destination_offset))) {
 		//destination buffer isn't long enough
 		return -6;
 	}
