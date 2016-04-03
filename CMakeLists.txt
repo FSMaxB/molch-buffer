@@ -6,7 +6,7 @@ if (MOLCH_BUFFER)
 endif (MOLCH_BUFFER)
 SET_PROPERTY(GLOBAL PROPERTY MOLCH_BUFFER "true")
 
-project (molch-buffer)
+project (molch-buffer C)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/")
 
