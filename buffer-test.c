@@ -611,5 +611,18 @@ int main(void) {
 
 	buffer_destroy_from_heap(buffer_to_be_filled);
 
+	buffer_t *custom_allocated_empty_buffer = buffer_create_with_custom_allocator(0, 0, malloc, free);
+	if (custom_allocated_empty_buffer == NULL) {
+		fprintf(stderr, "ERROR: Failed to customly allocate empty buffer.\n");
+		return EXIT_FAILURE;
+	}
+	if (custom_allocated_empty_buffer->content != NULL) {
+		buffer_destroy_with_custom_deallocator(custom_allocated_empty_buffer, free);
+		fprintf(stderr, "ERROR: Customly allocated empty buffer has content.\n");
+		return EXIT_FAILURE;
+	}
+
+	buffer_destroy_with_custom_deallocator(custom_allocated_empty_buffer, free);
+
 	return EXIT_SUCCESS;
 }

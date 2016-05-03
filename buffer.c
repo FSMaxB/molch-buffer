@@ -108,9 +108,12 @@ buffer_t *buffer_create_with_custom_allocator(
 		void *(*allocator)(size_t size),
 		void (*deallocator)(void *pointer)
 		) {
-	unsigned char *content = allocator(buffer_length);
-	if (content == NULL) {
-		return NULL;
+	unsigned char *content = NULL;
+	if (buffer_length != 0) {
+		content = allocator(buffer_length);
+		if (content == NULL) {
+			return NULL;
+		}
 	}
 
 	buffer_t *buffer = allocator(sizeof(buffer_t));
@@ -159,8 +162,14 @@ void buffer_destroy_from_heap(buffer_t * const buffer) {
 void buffer_destroy_with_custom_deallocator(
 		buffer_t * buffer,
 		void (*deallocator)(void *pointer)) {
-	sodium_memzero(buffer->content, buffer->content_length);
-	deallocator(buffer->content);
+	if (buffer == NULL) {
+		return;
+	}
+
+	if (buffer->content != NULL) {
+		sodium_memzero(buffer->content, buffer->content_length);
+		deallocator(buffer->content);
+	}
 	deallocator(buffer);
 }
 
