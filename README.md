@@ -19,3 +19,5 @@ typedef struct buffer_t {
 ```
 
 To use it just put `buffer.h` and `buffer.c` into your project. You also need to tell the linker to link it against libsodium.
+
+molch-buffer is licensed under the ISC license.
