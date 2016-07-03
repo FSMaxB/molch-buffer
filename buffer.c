@@ -3,7 +3,7 @@
  *
  * ISC License
  *
- * Copyright (c) 2015-2016 Max Bruckner <max at maxbruckner dot de>
+ * Copyright (C) 2015-2016 Max Bruckner (FSMaxB) <max at maxbruckner dot de>
  *
  * Permission to use, copy, modify, and/or distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
